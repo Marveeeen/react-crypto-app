@@ -5,7 +5,7 @@ import millify from 'millify';
 import { Col, Row, Typography, Select } from 'antd'
 import { MoneyCollectOutlined, DollarCircleOutlined, FundOutlined, ExclamationCircleOutlined, StopOutlined, TrophyOutlined, CheckOutlined, NumberOutlined, ThunderboltOutlined } from '@ant-design/icons';
 
-import { LineChart } from './LineChart'
+import LineChart from './LineChart'
 import { useGetCryptoDetailsQuery, useGetCryptoHistoryQuery } from '../services/cryptoApi';
 
 
@@ -18,6 +18,11 @@ const CryptoDetails = () => {
   const { data, isFetching } = useGetCryptoDetailsQuery(coinId)
   const { data: coinHistory } = useGetCryptoHistoryQuery({ coinId, timePeriod })
   const cryptoDetails = data?.data?.coin;
+  const coinTimestamp = [];
+  for (let i = 0; i < coinHistory?.data?.history?.length; i += 1) {
+    const date = new Date(coinHistory?.data?.history[i].timestamp);
+    coinTimestamp.push(date.toLocaleDateString());
+  }
 
   if (isFetching) return 'Loading...'
 
@@ -56,12 +61,13 @@ const CryptoDetails = () => {
             placeholder="Select Time Period"
             onChange={(value) => setTimePeriod(value)}
         >
-            {time.map((date) => <Option key={data}>{date}</Option>)}
+            {time.map((date) => <Option key={date}>{date}</Option>)}
         </Select>
         <LineChart 
             coinHistory={coinHistory} 
-            currentPrice={millify(cryptoDetails.price)}
-            coinName={cryptoDetails.name}
+            currentPrice={millify(cryptoDetails?.price)}
+            coinName={cryptoDetails?.name}
+            coinTimestamp={coinTimestamp}
         />
         <Col className='stats-container'>
             <Col className='coin-value-statistics'>
