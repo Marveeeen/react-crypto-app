@@ -18,12 +18,7 @@ const CryptoDetails = () => {
   const { data, isFetching } = useGetCryptoDetailsQuery(coinId)
   const { data: coinHistory } = useGetCryptoHistoryQuery({ coinId, timePeriod })
   const cryptoDetails = data?.data?.coin;
-  const coinTimestamp = [];
-  for (let i = 0; i < coinHistory?.data?.history?.length; i += 1) {
-    const date = new Date(coinHistory?.data?.history[i].timestamp);
-    coinTimestamp.push(date.toLocaleDateString());
-  }
-
+  
   if (isFetching) return 'Loading...'
 
   const time = ['3h', '24h', '7d', '30d', '1y', '3m', '3y', '5y'];
@@ -67,7 +62,6 @@ const CryptoDetails = () => {
             coinHistory={coinHistory} 
             currentPrice={millify(cryptoDetails?.price)}
             coinName={cryptoDetails?.name}
-            coinTimestamp={coinTimestamp}
         />
         <Col className='stats-container'>
             <Col className='coin-value-statistics'>
