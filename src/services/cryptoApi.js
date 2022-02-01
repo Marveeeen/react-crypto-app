@@ -3,7 +3,7 @@ import { ConfigProvider } from 'antd';
 
 const cryptoApiHeaders = {
     'x-rapidapi-host': 'coinranking1.p.rapidapi.com',
-    'x-rapidapi-key': 'a8e2c852ffmshcf9b5c4d20824a8p14af2djsn9d16ce30bb5c'
+    'x-rapidapi-key': process.env.REACT_APP_RAPIDAPI_API_KEY
 
 }
 
@@ -18,13 +18,16 @@ export const cryptoApi = createApi({
         getCryptos: builder.query({
             query: (count) => createRequest(`/coins?limit=${count}`)
         }),
+        getExchanges: builder.query({
+            query: () => createRequest(`/exchanges`),
+        }),
         getCryptoDetails: builder.query({
             query: (coinId) => createRequest(`/coin/${coinId}`),
         }),
         getCryptoHistory: builder.query({
-            query: ({ coinId, timePeriod }) => createRequest(`coin/${coinId}/history?timePeriod=${timePeriod}`),
+            query: ({ coinId, timePeriod }) => createRequest(`/coin/${coinId}/history?timePeriod=${timePeriod}`),
         })
     })
 });
 
-export const { useGetCryptosQuery, useGetCryptoDetailsQuery, useGetCryptoHistoryQuery } = cryptoApi;
+export const { useGetCryptosQuery, useGetCryptoDetailsQuery, useGetCryptoHistoryQuery, useGetExchangesQuery } = cryptoApi;
